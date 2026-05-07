@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BioXcel — Class 12 Biology NCERT | CBSE</title>
+    <style>
+        .sim-badge {
+            background: rgba(108, 99, 255, 0.2) !important;
+            color: #a78bfa !important;
+            border: 1px solid rgba(108, 99, 255, 0.4) !important;
+            font-weight: 600 !important;
+            animation: simPulse 2s infinite;
+        }
+
+        @keyframes simPulse {
+
+            0%,
+            100% {
+                box-shadow: none;
+            }
+
+            50% {
+                box-shadow: 0 0 8px rgba(108, 99, 255, 0.5);
+            }
+        }
+
+        .sim-launch-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.15), rgba(0, 200, 150, 0.1));
+            border: 1.5px solid rgba(108, 99, 255, 0.4);
+            border-radius: 14px;
+            text-decoration: none;
+            color: #e8f0fe;
+            transition: all 0.22s;
+            cursor: pointer;
+        }
+
+        .sim-launch-btn:hover {
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.28), rgba(0, 200, 150, 0.18));
+            border-color: rgba(108, 99, 255, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(108, 99, 255, 0.25);
+        }
+
+        .sim-launch-icon { font-size: 1.8rem; }
+        .sim-launch-gel {
+            background: linear-gradient(135deg, rgba(255,209,102,0.15), rgba(255,159,67,0.1)) !important;
+            border-color: rgba(255,209,102,0.4) !important;
+        }
+        .sim-launch-gel:hover {
+            background: linear-gradient(135deg, rgba(255,209,102,0.28), rgba(255,159,67,0.2)) !important;
+            border-color: rgba(255,209,102,0.7) !important;
+            box-shadow: 0 6px 24px rgba(255,209,102,0.2) !important;
+        }
+    </style>
+    <meta name="description"
+        content="Complete Class 12 Biology NCERT & CBSE syllabus — all 16 chapters across 5 units with topics, marks weightage, and key concepts." />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- Scroll Progress -->
+    <div class="top-bar" id="top-bar"></div>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-brand">🧬 Bhawani Shankar Sharma<span class="dot">X</span>cel</div>
+        <ul class="nav-links">
+            <li><a href="#units">Chapters</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <span class="nav-badge">Class 12 · CBSE</span>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-particles" id="particles"></div>
+        <div class="hero-content">
+            <div class="hero-tag fade-up">📚 NCERT · CBSE · 2024–25 Syllabus</div>
+            <h1 class="fade-up delay-1">
+                Master <span class="highlight">Class 12 Biology</span><br />Like Never Before
+            </h1>
+            <p class="fade-up delay-2">
+                All 16 chapters. 5 units. Complete CBSE syllabus coverage with topic breakdowns,
+                marks weightage, and key concepts — in one beautiful place.
+            </p>
+            <div class="hero-btns fade-up delay-3">
+                <a href="#units" class="btn-primary">Explore Chapters →</a>
+                <a href="#features" class="btn-secondary">What's Inside</a>
+            </div>
+            <div class="hero-stats fade-up delay-3">
+                <div class="stat">
+                    <div class="stat-num">16</div>
+                    <div class="stat-label">Chapters</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">5</div>
+                    <div class="stat-label">Units</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">70</div>
+                    <div class="stat-label">Theory Marks</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">100+</div>
+                    <div class="stat-label">Key Topics</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UNITS & CHAPTERS -->
+    <section id="units" style="padding:80px 2rem; background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div class="section-header">
+                <div class="section-tag">All Chapters</div>
+                <h2>NCERT Syllabus — Unit by Unit</h2>
+                <p>Click any chapter to see full topic breakdown and exam weightage</p>
+            </div>
+
+            <!-- Search -->
+            <div class="search-wrap">
+                <input type="text" id="search-input" placeholder="Search chapters, topics, keywords…"
+                    autocomplete="off" />
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <!-- Chapter Grid -->
+            <div class="unit-grid" id="unit-grid"></div>
+        </div>
+    </section>
+
+    <!-- UNIT SUMMARIES -->
+    <section id="units-info" style="padding:60px 2rem; background: var(--bg2);">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div class="section-header">
+                <div class="section-tag">Unit Overview</div>
+                <h2>CBSE Marks Distribution</h2>
+                <p>Know where to focus for maximum score</p>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:1rem;">
+                <div class="feature-card" style="text-align:center; border-color:rgba(0,200,150,0.2);">
+                    <div class="feature-icon">🌱</div>
+                    <h3>Unit 6: Reproduction</h3>
+                    <p style="font-size:1.4rem; font-weight:800; color:var(--primary); margin:8px 0;">14 Marks</p>
+                    <p>Chapters 1–4 · 4 chapters</p>
+                </div>
+                <div class="feature-card" style="text-align:center; border-color:rgba(108,99,255,0.2);">
+                    <div class="feature-icon">🧬</div>
+                    <h3>Unit 7: Genetics &amp; Evolution</h3>
+                    <p style="font-size:1.4rem; font-weight:800; color:var(--secondary); margin:8px 0;">18 Marks</p>
+                    <p>Chapters 5–7 · 3 chapters</p>
+                </div>
+                <div class="feature-card" style="text-align:center; border-color:rgba(255,107,107,0.2);">
+                    <div class="feature-icon">🏥</div>
+                    <h3>Unit 8: Human Welfare</h3>
+                    <p style="font-size:1.4rem; font-weight:800; color:var(--accent); margin:8px 0;">14 Marks</p>
+                    <p>Chapters 8–10 · 3 chapters</p>
+                </div>
+                <div class="feature-card" style="text-align:center; border-color:rgba(255,209,102,0.2);">
+                    <div class="feature-icon">🔬</div>
+                    <h3>Unit 9: Biotechnology</h3>
+                    <p style="font-size:1.4rem; font-weight:800; color:var(--accent2); margin:8px 0;">12 Marks</p>
+                    <p>Chapters 11–12 · 2 chapters</p>
+                </div>
+                <div class="feature-card" style="text-align:center; border-color:rgba(34,211,238,0.2);">
+                    <div class="feature-icon">🌿</div>
+                    <h3>Unit 10: Ecology</h3>
+                    <p style="font-size:1.4rem; font-weight:800; color:#22d3ee; margin:8px 0;">14 Marks</p>
+                    <p>Chapters 13–16 · 4 chapters</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" style="padding:80px 2rem; background: var(--bg);">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div class="section-header">
+                <div class="section-tag">Why BioXcel?</div>
+                <h2>Everything You Need to Excel</h2>
+                <p>Built for CBSE board exam preparation</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Full Syllabus Coverage</h3>
+                    <p>All 16 NCERT chapters from Unit 6 to Unit 10, exactly as per CBSE 2024–25 curriculum.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Marks Weightage</h3>
+                    <p>Know exactly how many marks each chapter carries in the board exam to plan your study.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Smart Search</h3>
+                    <p>Instantly find any chapter, topic, or keyword across the entire syllabus with live search.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📌</div>
+                    <h3>Topic Breakdown</h3>
+                    <p>Every chapter has a detailed topic list so you never miss an important concept.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Quick Navigation</h3>
+                    <p>Jump to any chapter instantly. Clean layout designed for focused, distraction-free study.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌙</div>
+                    <h3>Dark Mode Design</h3>
+                    <p>Eye-friendly dark interface — perfect for late-night study sessions before board exams.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" style="padding:70px 2rem; background: var(--bg2);">
+        <div style="max-width:720px; margin:0 auto; text-align:center;">
+            <div class="section-tag" style="display:inline-block; margin-bottom:1rem;">About</div>
+            <h2 style="font-family:'Outfit',sans-serif; font-size:2rem; font-weight:800; margin-bottom:1rem;">
+                Designed for Class 12 CBSE Students
+            </h2>
+            <p style="color:var(--text-muted); font-size:1rem; line-height:1.8; margin-bottom:2rem;">
+                BioXcel is a comprehensive study reference for Class 12 Biology as per the
+                <strong style="color:var(--text);">NCERT textbook</strong> and
+                <strong style="color:var(--text);">CBSE syllabus</strong>.
+                It covers all five units — Reproduction, Genetics &amp; Evolution, Biology in Human Welfare,
+                Biotechnology, and Ecology — with all 16 chapters, key topics, and board exam weightage.
+            </p>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <div
+                    style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem 1.5rem; min-width:140px;">
+                    <div
+                        style="font-size:1.8rem; font-weight:800; color:var(--primary); font-family:'Outfit',sans-serif;">
+                        Class 12</div>
+                    <div style="font-size:0.8rem; color:var(--text-muted);">CBSE Board</div>
+                </div>
+                <div
+                    style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem 1.5rem; min-width:140px;">
+                    <div
+                        style="font-size:1.8rem; font-weight:800; color:var(--secondary); font-family:'Outfit',sans-serif;">
+                        NCERT</div>
+                    <div style="font-size:0.8rem; color:var(--text-muted);">Official Textbook</div>
+                </div>
+                <div
+                    style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem 1.5rem; min-width:140px;">
+                    <div
+                        style="font-size:1.8rem; font-weight:800; color:var(--accent2); font-family:'Outfit',sans-serif;">
+                        2024–25</div>
+                    <div style="font-size:0.8rem; color:var(--text-muted);">Academic Year</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>🧬 <strong>BioXcel</strong> — Class 12 Biology · NCERT &amp; CBSE Syllabus</p>
+        <p style="margin-top:6px;">Built for students. Covers all 16 chapters across 5 units. Best of luck for your
+            boards! 🎓</p>
+    </footer>
+
+    <!-- MODAL -->
+    <div id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-ch" id="modal-ch-label"></div>
+                    <div class="modal-title" id="modal-ch-title"></div>
+                </div>
+                <button class="modal-close" id="modal-close">✕</button>
+            </div>
+
+            <div class="modal-section">
+                <h3>Key Topics</h3>
+                <div class="topic-grid" id="modal-topics"></div>
+            </div>
+
+            <div class="modal-section">
+                <h3>Keywords</h3>
+                <div id="modal-tags" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+            </div>
+
+            <div class="modal-section">
+                <h3>Exam Info</h3>
+                <div class="marks-box">
+                    <div class="marks-item">
+                        <div class="marks-val" id="modal-marks"></div>
+                        <div class="marks-lbl">Unit Marks</div>
+                    </div>
+                    <div class="marks-item">
+                        <div class="marks-val" id="modal-importance" style="font-size:1rem; padding-top:8px;"></div>
+                        <div class="marks-lbl">Importance</div>
+                    </div>
+                    <div class="marks-item">
+                        <div class="marks-val">70</div>
+                        <div class="marks-lbl">Total Theory</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation CTA (Chapter 6 — Translation) -->
+            <div class="modal-section" id="modal-sim-section" style="display:none;">
+                <h3>🔬 Interactive Simulation</h3>
+                <a href="translation.html" class="sim-launch-btn">
+                    <span class="sim-launch-icon">⚗️</span>
+                    <div>
+                        <div style="font-weight:700; font-size:1rem;">Launch Translation Simulation</div>
+                        <div style="font-size:0.8rem; color:rgba(255,255,255,0.7); margin-top:2px;">Watch mRNA → Ribosome → Polypeptide chain, step by step</div>
+                    </div>
+                    <span style="margin-left:auto; font-size:1.2rem;">→</span>
+                </a>
+            </div>
+
+            <!-- Simulation CTA (Chapter 11 — Gel Electrophoresis) -->
+            <div class="modal-section" id="modal-sim-section-gel" style="display:none;">
+                <h3>🔬 Interactive Simulation</h3>
+                <a href="gel-electrophoresis.html" class="sim-launch-btn sim-launch-gel">
+                    <span class="sim-launch-icon">🧫</span>
+                    <div>
+                        <div style="font-weight:700; font-size:1rem;">Launch Gel Electrophoresis Simulation</div>
+                        <div style="font-size:0.8rem; color:rgba(255,255,255,0.7); margin-top:2px;">Load DNA samples, apply voltage, watch bands separate by size</div>
+                    </div>
+                    <span style="margin-left:auto; font-size:1.2rem;">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

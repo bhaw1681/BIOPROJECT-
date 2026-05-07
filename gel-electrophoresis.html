@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gel Electrophoresis Simulation — BioXcel Class 12 Biology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:#ffd166;--primary-glow:rgba(255,209,102,0.3);--secondary:#00c896;--accent:#ff6b6b;--purple:#a78bfa;--bg:#07090f;--bg2:#0e1320;--bg3:#141d2e;--card:#111827;--text:#e8f0fe;--muted:#6b7a99;--border:rgba(255,209,102,0.15);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px;}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;background:rgba(7,9,15,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.nav-brand{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:800;color:var(--primary);text-decoration:none;}
+.back-btn{display:flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:0.88rem;padding:7px 14px;border:1px solid var(--border);border-radius:8px;transition:all 0.2s;}
+.back-btn:hover{color:var(--primary);border-color:var(--primary);}
+
+.sim-header{text-align:center;padding:2.2rem 1rem 1.2rem;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(255,209,102,0.1) 0%,transparent 70%);}
+.unit-pill{display:inline-block;background:rgba(255,209,102,0.1);border:1px solid rgba(255,209,102,0.3);color:var(--primary);font-size:0.75rem;font-weight:600;padding:4px 14px;border-radius:20px;margin-bottom:0.8rem;text-transform:uppercase;letter-spacing:1px;}
+.sim-header h1{font-family:'Outfit',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:0.5rem;}
+.sim-header h1 span{background:linear-gradient(135deg,var(--primary),#ff9f43);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sim-header p{color:var(--muted);font-size:0.92rem;max-width:540px;margin:0 auto;}
+
+/* ── LAYOUT ── */
+.page-wrap{display:grid;grid-template-columns:220px 1fr 260px;gap:1.2rem;max-width:1300px;margin:0 auto;padding:1.2rem 1.2rem 3rem;}
+@media(max-width:1000px){.page-wrap{grid-template-columns:1fr;}}
+
+/* ── LEFT PANEL ── */
+.left-panel{display:flex;flex-direction:column;gap:1rem;}
+.panel-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;}
+.panel-box h3{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--primary);font-weight:700;margin-bottom:0.8rem;}
+.lane-option{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;cursor:pointer;transition:background 0.15s;border:1px solid transparent;}
+.lane-option:hover{background:rgba(255,255,255,0.04);}
+.lane-option.active{background:rgba(255,209,102,0.08);border-color:rgba(255,209,102,0.25);}
+.lane-dot{width:10px;height:10px;border-radius:50%;}
+.lane-name{font-size:0.8rem;font-weight:500;flex:1;}
+.lane-frags{font-size:0.7rem;color:var(--muted);}
+.lane-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.65rem;}
+.lane-option.active .lane-check{background:var(--primary);border-color:var(--primary);color:#000;}
+
+.voltage-wrap{display:flex;flex-direction:column;gap:6px;}
+.voltage-row{display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;}
+.voltage-val{font-family:'JetBrains Mono',monospace;color:var(--primary);font-weight:600;}
+.slider{width:100%;accent-color:var(--primary);margin-top:2px;}
+
+/* ── GEL CANVAS ── */
+.gel-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:relative;}
+canvas{display:block;width:100%;height:auto;cursor:crosshair;}
+.gel-top-bar{display:flex;align-items:center;gap:0.6rem;padding:0.8rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+.phase-tag{font-size:0.72rem;padding:3px 10px;border-radius:20px;font-weight:600;}
+.phase-idle{background:rgba(107,122,153,0.15);color:var(--muted);}
+.phase-running{background:rgba(255,209,102,0.15);color:var(--primary);animation:blink 1.2s infinite;}
+.phase-stained{background:rgba(0,200,150,0.15);color:var(--secondary);}
+.phase-done{background:rgba(167,139,250,0.15);color:var(--purple);}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.5;}}
+.tooltip-box{position:absolute;background:rgba(14,19,32,0.95);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:0.78rem;pointer-events:none;display:none;z-index:10;white-space:nowrap;}
+.tooltip-bp{color:var(--primary);font-weight:700;font-family:'JetBrains Mono',monospace;}
+
+.gel-controls{display:flex;gap:0.5rem;padding:0.8rem 1rem;border-top:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;align-items:center;}
+.btn{border:none;border-radius:9px;font-size:0.82rem;font-weight:600;cursor:pointer;padding:8px 18px;transition:all 0.18s;font-family:'Inter',sans-serif;}
+.btn-run{background:linear-gradient(135deg,var(--primary),#ff9f43);color:#000;}
+.btn-run:hover{transform:translateY(-1px);box-shadow:0 4px 16px var(--primary-glow);}
+.btn-run:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.btn-stain{background:rgba(0,200,150,0.15);color:var(--secondary);border:1px solid rgba(0,200,150,0.3);}
+.btn-stain:hover{background:rgba(0,200,150,0.25);}
+.btn-stain:disabled{opacity:0.35;cursor:not-allowed;}
+.btn-reset{background:rgba(255,107,107,0.1);color:var(--accent);border:1px solid rgba(255,107,107,0.25);}
+.btn-reset:hover{background:rgba(255,107,107,0.2);}
+.speed-wrap{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:0.78rem;color:var(--muted);}
+.speed-wrap input{accent-color:var(--primary);width:70px;}
+
+/* ── RIGHT PANEL ── */
+.right-panel{display:flex;flex-direction:column;gap:1rem;}
+.info-step{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.info-step:last-child{border-bottom:none;}
+.step-num{width:22px;height:22px;border-radius:6px;background:rgba(255,209,102,0.1);border:1px solid rgba(255,209,102,0.25);color:var(--primary);font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-text{font-size:0.8rem;color:var(--muted);line-height:1.6;}
+.step-text strong{color:var(--text);}
+
+.size-table{width:100%;border-collapse:collapse;font-size:0.76rem;}
+.size-table th{color:var(--primary);text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);font-weight:600;}
+.size-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted);}
+.size-table tr.highlight td{color:var(--text);background:rgba(255,209,102,0.05);}
+.ladder-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;}
+
+.concept-pill{font-size:0.75rem;padding:4px 10px;border-radius:8px;background:var(--bg3);color:var(--muted);border:1px solid rgba(255,255,255,0.06);display:inline-flex;align-items:center;gap:5px;margin:2px;}
+.concept-pill::before{content:'•';color:var(--primary);}
+.concepts-wrap{display:flex;flex-wrap:wrap;gap:2px;}
+
+/* ── PROGRESS BAR ── */
+.run-progress{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin:0 1rem;}
+.run-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),#ff9f43);width:0%;transition:width 0.3s;border-radius:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">🧬 BioXcel</a>
+  <a class="back-btn" href="index.html">← Back to Syllabus</a>
+</nav>
+
+<div class="sim-header">
+  <div class="unit-pill">Unit 9 · Chapter 11 · Simulation</div>
+  <h1>Gel <span>Electrophoresis</span></h1>
+  <p>Load DNA samples, apply voltage, and watch fragments separate by size through an agarose gel</p>
+</div>
+
+<div class="page-wrap">
+
+  <!-- LEFT: Sample Selector + Voltage -->
+  <div class="left-panel">
+
+    <div class="panel-box">
+      <h3>⚡ Voltage</h3>
+      <div class="voltage-wrap">
+        <div class="voltage-row">
+          <span>Setting</span>
+          <span class="voltage-val" id="voltage-display">80 V</span>
+        </div>
+        <input type="range" class="slider" id="voltage-slider" min="40" max="150" value="80" step="10"/>
+        <div class="voltage-row" style="margin-top:4px;">
+          <span style="font-size:0.7rem;">Low (clear)</span>
+          <span style="font-size:0.7rem;">High (fast)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-box">
+      <h3>🧪 Sample Lanes</h3>
+      <p style="font-size:0.72rem;color:var(--muted);margin-bottom:0.7rem;">Lane 1 is always the DNA Ladder. Select up to 4 samples:</p>
+      <div id="lane-list" style="display:flex;flex-direction:column;gap:4px;"></div>
+    </div>
+
+    <div class="panel-box">
+      <h3>📊 Legend</h3>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:0.76rem;">
+        <div style="display:flex;align-items:center;gap:7px;"><div style="width:28px;height:6px;border-radius:3px;background:rgba(255,209,102,0.8);"></div>DNA Ladder</div>
+        <div style="display:flex;align-items:center;gap:7px;"><div style="width:28px;height:6px;border-radius:3px;background:rgba(0,200,150,0.7);"></div>Sample bands</div>
+        <div style="display:flex;align-items:center;gap:7px;"><div style="width:28px;height:6px;border-radius:3px;background:rgba(167,139,250,0.7);"></div>Unidentified</div>
+        <div style="display:flex;align-items:center;gap:7px;color:var(--muted);">← Negative (−) Wells</div>
+        <div style="display:flex;align-items:center;gap:7px;color:var(--muted);">→ Positive (+) Bottom</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CENTER: Gel Canvas -->
+  <div>
+    <div class="gel-wrap">
+      <div class="gel-top-bar">
+        <span style="font-size:0.85rem;font-weight:600;">Agarose Gel (1.5%)</span>
+        <span class="phase-tag phase-idle" id="phase-tag">● Idle</span>
+        <span style="margin-left:auto;font-size:0.75rem;color:var(--muted);" id="time-display">t = 0 min</span>
+      </div>
+      <div class="run-progress"><div class="run-progress-fill" id="progress-fill"></div></div>
+      <canvas id="gelCanvas" width="680" height="520"></canvas>
+      <div class="tooltip-box" id="tooltip">
+        <div class="tooltip-bp" id="tooltip-bp">~1000 bp</div>
+        <div id="tooltip-lane" style="color:var(--muted);font-size:0.7rem;"></div>
+      </div>
+    </div>
+    <div class="gel-controls">
+      <button class="btn btn-run" id="btn-run">▶ Run Gel</button>
+      <button class="btn btn-stain" id="btn-stain" disabled>🔦 UV Stain</button>
+      <button class="btn btn-reset" id="btn-reset">↺ Reset</button>
+      <div class="speed-wrap">Speed <input type="range" id="speed-slider" min="1" max="6" value="3"/></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Info Panel -->
+  <div class="right-panel">
+    <div class="panel-box">
+      <h3>📖 How it Works</h3>
+      <div class="info-step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Load samples</strong> — DNA mixed with loading dye is pipetted into wells at the negative (−) electrode end.</div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Apply voltage</strong> — Electric current causes negatively charged DNA to migrate toward the positive (+) electrode.</div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Size separation</strong> — Smaller fragments move <strong>faster</strong> through the agarose matrix. Larger fragments are retarded.</div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>EtBr staining</strong> — Ethidium bromide intercalates DNA and fluoresces under UV light, revealing bright orange bands.</div>
+      </div>
+      <div class="info-step">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Size estimation</strong> — Compare band position with the DNA ladder to estimate fragment size in base pairs (bp).</div>
+      </div>
+    </div>
+
+    <div class="panel-box">
+      <h3>🪜 DNA Ladder Reference</h3>
+      <table class="size-table" id="ladder-table">
+        <thead><tr><th>Band</th><th>Size (bp)</th><th>Position</th></tr></thead>
+        <tbody id="ladder-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="panel-box">
+      <h3>💡 Key Concepts</h3>
+      <div class="concepts-wrap">
+        <span class="concept-pill">Agarose gel matrix</span>
+        <span class="concept-pill">Electrophoresis</span>
+        <span class="concept-pill">DNA migration</span>
+        <span class="concept-pill">EtBr staining</span>
+        <span class="concept-pill">Base pairs (bp)</span>
+        <span class="concept-pill">DNA ladder</span>
+        <span class="concept-pill">Restriction enzyme digest</span>
+        <span class="concept-pill">Molecular weight marker</span>
+        <span class="concept-pill">Negative electrode</span>
+        <span class="concept-pill">PCR product</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="gel-electrophoresis-sim.js"></script>
+</body>
+</html>
